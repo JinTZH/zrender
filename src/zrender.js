@@ -24,7 +24,7 @@ define(function(require) {
         canvas: require('./Painter')
     };
 
-    var instances = {};    // ZRender实例map索引
+    var instances = {}; // ZRender实例map索引
 
     var zrender = {};
 
@@ -34,7 +34,7 @@ define(function(require) {
     zrender.version = '3.3.0';
 
     /**
-     * Initializing a zrender instance
+     * 初始化一个 zrender 实例
      * @param {HTMLElement} dom
      * @param {Object} opts
      * @param {string} [opts.renderer='canvas'] 'canvas' or 'svg'
@@ -53,11 +53,10 @@ define(function(require) {
      * Dispose zrender instance
      * @param {module:zrender/ZRender} zr
      */
-    zrender.dispose = function (zr) {
+    zrender.dispose = function(zr) {
         if (zr) {
             zr.dispose();
-        }
-        else {
+        } else {
             for (var key in instances) {
                 if (instances.hasOwnProperty(key)) {
                     instances[key].dispose();
@@ -74,11 +73,11 @@ define(function(require) {
      * @param {string} id zrender instance id
      * @return {module:zrender/ZRender}
      */
-    zrender.getInstance = function (id) {
+    zrender.getInstance = function(id) {
         return instances[id];
     };
 
-    zrender.registerPainter = function (name, Ctor) {
+    zrender.registerPainter = function(name, Ctor) {
         painterCtors[name] = Ctor;
     };
 
@@ -123,8 +122,7 @@ define(function(require) {
                 throw new Error('You need to require \'zrender/vml/vml\' to support IE8');
             }
             rendererType = 'vml';
-        }
-        else if (!rendererType || !painterCtors[rendererType]) {
+        } else if (!rendererType || !painterCtors[rendererType]) {
             rendererType = 'canvas';
         }
         var painter = new painterCtors[rendererType](dom, storage, opts);
@@ -156,7 +154,7 @@ define(function(require) {
         var oldDelFromMap = storage.delFromMap;
         var oldAddToMap = storage.addToMap;
 
-        storage.delFromMap = function (elId) {
+        storage.delFromMap = function(elId) {
             var el = storage.get(elId);
 
             oldDelFromMap.call(storage, elId);
@@ -164,7 +162,7 @@ define(function(require) {
             el && el.removeSelfFromZr(self);
         };
 
-        storage.addToMap = function (el) {
+        storage.addToMap = function(el) {
             oldAddToMap.call(storage, el);
 
             el.addSelfToZr(self);
@@ -178,7 +176,7 @@ define(function(require) {
          * 获取实例唯一标识
          * @return {string}
          */
-        getId: function () {
+        getId: function() {
             return this.id;
         },
 
@@ -186,7 +184,7 @@ define(function(require) {
          * 添加元素
          * @param  {module:zrender/Element} el
          */
-        add: function (el) {
+        add: function(el) {
             this.storage.addRoot(el);
             this._needsRefresh = true;
         },
@@ -195,7 +193,7 @@ define(function(require) {
          * 删除元素
          * @param  {module:zrender/Element} el
          */
-        remove: function (el) {
+        remove: function(el) {
             this.storage.delRoot(el);
             this._needsRefresh = true;
         },
@@ -207,8 +205,8 @@ define(function(require) {
          * @param {string} [config.clearColor=0] Clear color
          * @param {string} [config.motionBlur=false] If enable motion blur
          * @param {number} [config.lastFrameAlpha=0.7] Motion blur factor. Larger value cause longer trailer
-        */
-        configLayer: function (zLevel, config) {
+         */
+        configLayer: function(zLevel, config) {
             this.painter.configLayer(zLevel, config);
             this._needsRefresh = true;
         },
@@ -216,7 +214,7 @@ define(function(require) {
         /**
          * Repaint the canvas immediately
          */
-        refreshImmediately: function () {
+        refreshImmediately: function() {
             // Clear needsRefresh ahead to avoid something wrong happens in refresh
             // Or it will cause zrender refreshes again and again.
             this._needsRefresh = false;
@@ -237,7 +235,7 @@ define(function(require) {
         /**
          * Perform all refresh
          */
-        flush: function () {
+        flush: function() {
             if (this._needsRefresh) {
                 this.refreshImmediately();
             }
@@ -251,7 +249,7 @@ define(function(require) {
          * @param  {module:zrender/Element} el
          * @param {Object} style
          */
-        addHover: function (el, style) {
+        addHover: function(el, style) {
             if (this.painter.addHover) {
                 this.painter.addHover(el, style);
                 this.refreshHover();
@@ -262,7 +260,7 @@ define(function(require) {
          * Add element from hover layer
          * @param  {module:zrender/Element} el
          */
-        removeHover: function (el) {
+        removeHover: function(el) {
             if (this.painter.removeHover) {
                 this.painter.removeHover(el);
                 this.refreshHover();
@@ -273,7 +271,7 @@ define(function(require) {
          * Clear all hover elements in hover layer
          * @param  {module:zrender/Element} el
          */
-        clearHover: function () {
+        clearHover: function() {
             if (this.painter.clearHover) {
                 this.painter.clearHover();
                 this.refreshHover();
@@ -283,14 +281,14 @@ define(function(require) {
         /**
          * Refresh hover in next frame
          */
-        refreshHover: function () {
+        refreshHover: function() {
             this._needsRefreshHover = true;
         },
 
         /**
          * Refresh hover immediately
          */
-        refreshHoverImmediately: function () {
+        refreshHoverImmediately: function() {
             this._needsRefreshHover = false;
             this.painter.refreshHover && this.painter.refreshHover();
         },
@@ -311,7 +309,7 @@ define(function(require) {
         /**
          * Stop and clear all animation immediately
          */
-        clearAnimation: function () {
+        clearAnimation: function() {
             this.animation.clear();
         },
 
@@ -357,7 +355,7 @@ define(function(require) {
          * Set default cursor
          * @param {string} [cursorStyle='default'] 例如 crosshair
          */
-        setCursorStyle: function (cursorStyle) {
+        setCursorStyle: function(cursorStyle) {
             this.handler.setCursorStyle(cursorStyle);
         },
 
@@ -387,7 +385,7 @@ define(function(require) {
          * @param {string} eventName Event name
          * @param {event=} event Event object
          */
-        trigger: function (eventName, event) {
+        trigger: function(eventName, event) {
             this.handler.trigger(eventName, event);
         },
 
@@ -395,7 +393,7 @@ define(function(require) {
         /**
          * Clear all objects and the canvas.
          */
-        clear: function () {
+        clear: function() {
             this.storage.delRoot();
             this.painter.clear();
         },
@@ -403,7 +401,7 @@ define(function(require) {
         /**
          * Dispose self.
          */
-        dispose: function () {
+        dispose: function() {
             this.animation.stop();
 
             this.clear();
@@ -412,9 +410,9 @@ define(function(require) {
             this.handler.dispose();
 
             this.animation =
-            this.storage =
-            this.painter =
-            this.handler = null;
+                this.storage =
+                this.painter =
+                this.handler = null;
 
             delInstance(this.id);
         }
